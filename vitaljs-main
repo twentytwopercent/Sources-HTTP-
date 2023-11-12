@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Vital</title>
+    <meta charset="UTF-8"/>
+    <meta name="keywords" content="Vital">
+    <meta name="author" content="Vedant">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="../imgs/vital-icon.png">
+    <link rel="stylesheet" href="./screen.css">
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.139.2/build/three.module.js",
+          "three/addons/": "https://unpkg.com/three@0.139.2/examples/jsm/"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <button id="deploy"></button>
+    <div class="login-signup" id="login-signup">
+        <h1></h1>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <hr>
+        <button id="login">Login</button>
+        <br>
+        <button id="signup">Create Account</button>
+    </div>
+    <script type="module">
+        import * as THREE from 'three';
+        import { PointerLockControls } from 'three/addons/controls/PointerLockControls.js';
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
+        import { getDatabase, set, get, update, remove, ref, child } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js";
+
+        function getAPI() {
+            return "AIzaSyCl2zQhoLi_oHrJ0oD_LsSC_S0KLP2o6As";
+        }
+
+        const firebaseConfig = {
+            apiKey: getAPI(),
+            authDomain: "chatapp-66304.firebaseapp.com",
+            databaseURL: "https://chatapp-66304-default-rtdb.firebaseio.com",
+            projectId: "chatapp-66304",
+            storageBucket: "chatapp-66304.appspot.com",
+            messagingSenderId: "423697508282",
+            appId: "1:423697508282:web:fb33f09af3366b28d01f83",
+            measurementId: "G-93HKFCV7CT"
+        };
+
+        const databaseDelayTime = 2;
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase();
+        const dbref = ref(db);
+        var usersLoggedIn;
+        var currentUsers = [];
+        var otherCurrents = [];
+        var currentUserInfo = [];
+
+        var inputAuth = {
+            username: document.getElementById("username"),
+            password: document.getElementById("password")
+        };
+
+        var foundLocalUsername = null;
+        var foundLocalPassword = null;
+        var accountEntered = false;
+
+        function getStringOfOnlineUsers() {
+            get(child(dbref, "Users/" + "king"))
+            .then((snapshot) => {
+                if (snapshot.exists()) {
+                    usersLoggedIn = snapshot.val().UsersLogged;
+                    currentUsers = usersLoggedIn.split(',');
+                }
+            });
+        }
+
+        function login() {
+            get(child(dbref, "Users/" + inputAuth.username.value))
+            .then((snapshot) => {
+                if (snapshot.exists()) {
+                    foundLocalUsername = snapshot.val().Username;
+                    foundLocalPassword = snapshot.val().Password;
+                    if (foundLocalPassword == inputAuth.password.value) {
+                        getStringOfOnlineUsers();
+                        getStringOfOnlineUsers();
+                        if (currentUsers.includes(inputAuth.username.value)) {
+                            accountEntered = true;
+                            alert("Logged In!");
+                            document.getElementById("login-signup").style.display = "none";
+                        } else {
+                            alert("Correct username and password, but access denied");
+                        }
+                    } else {
+                        alert("Wrong Password");
+                    }
+                } else {
+                    alert("That account does not exist");
+                }
+            });
+        }
+
+        function createAccount() {
+            if (!inputAuth.username.value == "" || !inputAuth.username.value == " " || !inputAuth.username.value == "king") {
+                set(ref(db, "Users/" + inputAuth.username.value), {
+                    Username: inputAuth.username.value,
+                    Password: inputAuth.password.value,
+                    XPosition: 0,
+                    YPosition: 0,
+                    ZPosition: 0,
+                });
+                alert("Account Created! Login to continue");
+            } else {
+                alert("Invalid username");
+            }
+        }
+
+        document.getElementById("login").onclick = function() {
+            login();
+        }
+
+        document.getElementById("signup").onclick = function() {
+            createAccount();
+        }
+
+        const deployButton = document.getElementById("deploy");
+
+        deployButton.onclick = function () {
+
+        if (accountEntered) { 
+
+        const scene = new THREE.Scene();
+        const player = {
+            camera: new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000),
+            controls: undefined,
+            speed: 0.1,
+        };
+
+        var game = false;
+        player.controls = new PointerLockControls(player.camera, document.body);
+        var keyPressed = " ";
+
+        const textureLoader = new THREE.TextureLoader();
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        window.addEventListener("contextmenu", e => e.preventDefault());
+
+        const geometry = new THREE.BoxGeometry(15, 1, 15);
+        const texture = textureLoader.load("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVA7CwRI26PUHxxMM7zSCQXs0xUrKbgncT9g&usqp=CAU"); 
+        const material = new THREE.MeshBasicMaterial( { map:texture } );
+        const ground = new THREE.Mesh(geometry, material);
+        scene.add(ground);
+
+        const charGeo = new THREE.BoxGeometry(1, 3, 1);
+        const charMat = new THREE.MeshBasicMaterial({color: 0xd94169});
+        const charMesh = new THREE.Mesh(charGeo, charMat);
+
+        ground.position.y = -1;
+
+        player.camera.position.z = 5;
+
+        const gameLoader = {
+            start: function() {
+                requestAnimationFrame(gameLoader.start);
+                renderer.render(scene, player.camera);
+                game = true;
+            },
+                stop: function() {
+                cancelAnimationFrame(this.start);
+                game = false;
+            }
+        };
+
+        deployButton.onclick = function() {
+            gameLoader.start();
+            player.controls.lock();
+        }
+
+        document.addEventListener("keydown", function(e) {
+            keyPressed = e.key;
+        });
+
+        document.addEventListener("keyup", function(){
+            keyPressed = " ";
+        });
+
+        function checkKeyPressed() {
+            if (game) {
+                switch (keyPressed) {
+                case "w": 
+                    player.controls.moveForward(player.speed);
+                    break;
+                case "a":
+                    player.controls.moveRight(0-player.speed);
+                    break;
+                case "s":
+                    player.controls.moveForward(0-player.speed);
+                    break;
+                case "d": 
+                    player.controls.moveRight(player.speed);
+                    break;
+            }
+        }
+            requestAnimationFrame( checkKeyPressed );
+        }
+
+        checkKeyPressed();
+
+        // Switiching to Database Connection
+
+        var localPlayer = {
+            username: foundLocalUsername,
+            password: foundLocalPassword
+        };
+
+        function setPosition() {
+            set(ref(db, "Users/" + localPlayer.username), {
+                Username: localPlayer.username,
+                Password: localPlayer.password,
+                XPosition: player.camera.position.x,
+                YPosition: player.camera.position.y,
+                ZPosition: player.camera.position.z,
+            });
+        }
+
+        function setOwnerPosition() {
+            set(ref(db, "Users/" + "king"), {
+                Username: localPlayer.username,
+                Password: localPlayer.password,
+                XPosition: player.camera.position.x,
+                YPosition: player.camera.position.y,
+                ZPosition: player.camera.position.z,
+                UsersLogged: usersLoggedIn
+            });
+        }
+
+        function excludeSelf() {
+            otherCurrents = currentUsers;
+            otherCurrents.splice(otherCurrents.indexOf(localPlayer.username), 1);
+        }
+
+        var ind = 0;
+
+        excludeSelf();
+
+        function otherPlayer() {
+            this.username = otherCurrents[0];
+            this.xPos = null;
+            this.yPos = null;
+            this.xPos = null;
+
+            this.mesh = new THREE.Mesh(charGeo, charMat);
+
+            this.setCurrentPosition = function () {
+                get(child(dbref, "Users/" + this.username))
+                .then((snapshot) => {
+                    if (snapshot.exists()) {
+                        this.xPos = snapshot.val().XPosition;
+                        this.yPos = snapshot.val().YPosition;
+                        this.zPos = snapshot.val().ZPosition;
+
+                        this.mesh.position.x = this.xPos;
+                        this.mesh.position.y = this.yPos;
+                        this.mesh.position.z = this.zPos;
+                    }
+                });
+            }
+        }
+
+        ind = 0;
+        while (ind < otherCurrents.length) {
+            currentUserInfo[ind] = new otherPlayer();
+            currentUserInfo[ind].username = otherCurrents[ind];
+            scene.add(currentUserInfo[ind].mesh);
+            ind ++ ;
+        }
+
+        function updateEachOtherPlayer() {
+            ind = 0;
+            while (ind < otherCurrents.length) {
+                currentUserInfo[ind].setCurrentPosition();
+                ind ++ ;
+            }
+        }
+
+        const updateDatabase = setInterval(function () {
+            if (localPlayer.username == "king") {
+                setOwnerPosition();
+            } else {
+                setPosition();
+            }
+
+            getStringOfOnlineUsers();
+            excludeSelf();
+
+            updateEachOtherPlayer();
+        }, databaseDelayTime);
+       }
+    }
+    </script>
+  </body>
+</html>
