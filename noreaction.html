@@ -51,6 +51,10 @@
             var intr;
             var score = 100;
 
+            document.oncontextmenu = function() {
+              return false;
+            };
+
             button.onclick = function () {
                 if (!played) {
                     button.style.backgroundColor = "red";
