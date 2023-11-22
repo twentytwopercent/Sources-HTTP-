@@ -1,0 +1,142 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>
+            Reaction Time!
+        </title>
+        <style>
+            body {
+                margin: 0;
+                text-align: center;
+            }
+
+            h1 {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                font-size: 70px;
+            }
+
+            h3 {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            }
+
+            strong {
+                color: rgb(47, 0, 255);
+            }
+
+            button {
+                height: 300px;
+                width: 500px;
+                border: 0px;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                font-size: 50px;
+                background-color: yellowgreen;
+            }
+
+            button:hover {
+                background-color: rgb(136, 180, 49);
+            }
+        </style>
+    </head>
+    <body>
+        <h1 id="title">Reaction Time!</h1>
+        <h3 id="instruct">Press 'Space' when the color turns <strong>Blue</strong></h3>
+        <br>
+        <button id="color">START</button>
+        <p>A simple game made by Vedant</p>
+        <script>
+            const button = document.getElementById("color");
+            let played = false;
+            let clicked = false;
+            var currentColor;
+            var intr;
+            var score = 100;
+
+            button.onclick = function () {
+                if (!played) {
+                    button.style.backgroundColor = "red";
+                    button.innerHTML = "";
+                    currentColor = "red";
+                    setTimeout(function () {
+                        button.style.backgroundColor = "yellow";
+                        currentColor = "yellow";
+                        setTimeout(function () {
+                            button.style.backgroundColor = "green";
+                            currentColor = "green";
+                            setTimeout(function () {
+                                button.style.backgroundColor = "red";
+                                currentColor = "red";
+                                setTimeout(function () {
+                                    button.style.backgroundColor = "yellow";
+                                    currentColor = "yellow";
+                                    setTimeout(function () {
+                                        button.style.backgroundColor = "green";
+                                        currentColor = "green";
+                                        setTimeout(function () {
+                                            button.style.backgroundColor = "red";
+                                            currentColor = "red";
+                                            setTimeout(function () {
+                                                button.style.backgroundColor = "yellow";
+                                                currentColor = "yellow";
+                                                setTimeout(function () {
+                                                    button.style.backgroundColor = "green";
+                                                    currentColor = "green";
+                                                    setTimeout(function () {
+                                                        button.style.backgroundColor = "red";
+                                                        currentColor = "red";
+                                                        setTimeout(function () {
+                                                            button.style.backgroundColor = "yellow";
+                                                            currentColor = "yellow";
+                                                            setTimeout(function () {
+                                                                button.style.backgroundColor = "green";
+                                                                currentColor = "green";
+                                                                setTimeout(function () {
+                                                                    button.style.backgroundColor = "red";
+                                                                    currentColor = "red";
+                                                                    setTimeout(function () {
+                                                                        button.style.backgroundColor = "yellow";
+                                                                        currentColor = "yellow";
+                                                                        setTimeout(function () {
+                                                                            button.style.backgroundColor = "green";
+                                                                            currentColor = "green";
+                                                                            setTimeout(function () {
+                                                                                button.style.backgroundColor = "blue";
+                                                                                currentColor = "blue";
+                                                                                played = true;
+
+                                                                                intr = setInterval(function () {
+                                                                                    score -- ;
+                                                                                }, 22);
+                                                                            }, 222)
+                                                                        }, 222);
+                                                                }, 222);
+                                                            }, 222)
+                                                            }, 222);
+                                                        }, 222);
+                                                    }, 222)
+                                                }, 222);
+                                            }, 222);
+                                        }, 222)
+                                    }, 222);
+                                }, 222);
+                            }, 222)
+                        }, 222);
+                    }, 222);
+                }
+            }
+
+            document.onkeydown = function (e) {
+                if (e.key == " ") {
+                    if (currentColor == "blue") {
+                        clicked = true;
+                        clearInterval(intr);
+                        button.innerHTML = "Your score: " + score + "%";
+                    } else {
+                        button.style.display = "none";
+                        document.getElementById("title").innerHTML = "Too early!";
+                        document.getElementById("instruct").innerHTML = "Press CTRL + R to try again";
+                    }
+                }
+            }
+        </script>
+    </body>
+</html>
