@@ -1,3 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <hta:application id="identification"
+    applicationname="Swipe"
+    windowstate="maximize"
+    security="restricted"
+    icon="">
+    <title>Swipe</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <style>
+        body {
+            background-color: #000000;
+            overflow-y: hidden;
+            overflow-x: scroll;
+        }
+
+        canvas {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            height: 645px;
+            width: 1366px;
+            background: url(imgs/sky.jpg);
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            border-color: #ffffff;
+            border: 3px solid;            
+        }
+
+        p {
+            position: absolute;
+            font-family: 'Segoe UI';
+            font-weight: lighter;
+            bottom: 0px;
+            left: 100px;
+            font-size: 18px;
+            color: #ffffff;
+        }
+
+        img {
+            display: none;
+        }
+    </style>
+</head>
+<body scroll="no">
+<canvas id="game"></canvas>
+
+<img id="playeridle1" src="imgs/char/01_idle_a/skeleton-01_idle_a_01.png">
+<img id="playeridle2" src="imgs/char/01_idle_a/skeleton-01_idle_a_02.png">
+<img id="playeridle3" src="imgs/char/01_idle_a/skeleton-01_idle_a_03.png">
+<img id="playeridle4" src="imgs/char/01_idle_a/skeleton-01_idle_a_04.png">
+<img id="playeridle5" src="imgs/char/01_idle_a/skeleton-01_idle_a_05.png">
+<img id="playeridle6" src="imgs/char/01_idle_a/skeleton-01_idle_a_06.png">
+<img id="playeridle7" src="imgs/char/01_idle_a/skeleton-01_idle_a_07.png">
+<img id="playeridle8" src="imgs/char/01_idle_a/skeleton-01_idle_a_08.png">
+<img id="playeridle9" src="imgs/char/01_idle_a/skeleton-01_idle_a_09.png">
+<img id="playeridle10" src="imgs/char/01_idle_a/skeleton-01_idle_a_10.png">
+<img id="playeridle11" src="imgs/char/01_idle_a/skeleton-01_idle_a_11.png">
+<img id="playeridle12" src="imgs/char/01_idle_a/skeleton-01_idle_a_12.png">
+<img id="playeridle13" src="imgs/char/01_idle_a/skeleton-01_idle_a_13.png">
+<img id="playeridle14" src="imgs/char/01_idle_a/skeleton-01_idle_a_14.png">
+<img id="playeridle15" src="imgs/char/01_idle_a/skeleton-01_idle_a_15.png">
+<img id="playeridle16" src="imgs/char/01_idle_a/skeleton-01_idle_a_16.png">
+<img id="playeridle17" src="imgs/char/01_idle_a/skeleton-01_idle_a_17.png">
+<img id="playeridle18" src="imgs/char/01_idle_a/skeleton-01_idle_a_18.png">
+<img id="playeridle19" src="imgs/char/01_idle_a/skeleton-01_idle_a_19.png">
+<img id="playeridle20" src="imgs/char/01_idle_a/skeleton-01_idle_a_20.png">
+
+<img id="playerrun1" src="imgs/char/03_run/skeleton-03_run_00.png">
+<img id="playerrun2" src="imgs/char/03_run/skeleton-03_run_01.png">
+<img id="playerrun3" src="imgs/char/03_run/skeleton-03_run_02.png">
+<img id="playerrun4" src="imgs/char/03_run/skeleton-03_run_03.png">
+<img id="playerrun5" src="imgs/char/03_run/skeleton-03_run_04.png">
+<img id="playerrun6" src="imgs/char/03_run/skeleton-03_run_05.png">
+<img id="playerrun7" src="imgs/char/03_run/skeleton-03_run_06.png">
+<img id="playerrun8" src="imgs/char/03_run/skeleton-03_run_07.png">
+<img id="playerrun9" src="imgs/char/03_run/skeleton-03_run_08.png">
+<img id="playerrun10" src="imgs/char/03_run/skeleton-03_run_09.png">
+<img id="playerrun11" src="imgs/char/03_run/skeleton-03_run_10.png">
+<img id="playerrun12" src="imgs/char/03_run/skeleton-03_run_11.png">
+<img id="playerrun13" src="imgs/char/03_run/skeleton-03_run_12.png">
+
+<img id="playerattack1" src="imgs/char/09_attack_a/skeleton-09_attack_a_00.png">
+<img id="playerattack2" src="imgs/char/09_attack_a/skeleton-09_attack_a_01.png">
+<img id="playerattack3" src="imgs/char/09_attack_a/skeleton-09_attack_a_02.png">
+<img id="playerattack4" src="imgs/char/09_attack_a/skeleton-09_attack_a_03.png">
+<img id="playerattack5" src="imgs/char/09_attack_a/skeleton-09_attack_a_04.png">
+<img id="playerattack6" src="imgs/char/09_attack_a/skeleton-09_attack_a_05.png">
+<img id="playerattack7" src="imgs/char/09_attack_a/skeleton-09_attack_a_06.png">
+<img id="playerattack8" src="imgs/char/09_attack_a/skeleton-09_attack_a_07.png">
+<img id="playerattack9" src="imgs/char/09_attack_a/skeleton-09_attack_a_08.png">
+<img id="playerattack10" src="imgs/char/09_attack_a/skeleton-09_attack_a_09.png">
+<img id="playerattack11" src="imgs/char/09_attack_a/skeleton-09_attack_a_10.png">
+<img id="playerattack12" src="imgs/char/09_attack_a/skeleton-09_attack_a_11.png">
+<img id="playerattack13" src="imgs/char/09_attack_a/skeleton-09_attack_a_12.png">
+<img id="playerattack14" src="imgs/char/09_attack_a/skeleton-09_attack_a_13.png">
+<img id="playerattack15" src="imgs/char/09_attack_a/skeleton-09_attack_a_14.png">
+
+<img id="enemy" src="imgs/enemy/00_idle/skeleton-00_idle_02.png">
+<img id="enemyexplode1" src="imgs/enemy/03_explode/skeleton-03_explode_00.png">
+<img id="enemyexplode2" src="imgs/enemy/03_explode/skeleton-03_explode_01.png">
+<img id="enemyexplode3" src="imgs/enemy/03_explode/skeleton-03_explode_02.png">
+<img id="enemyexplode4" src="imgs/enemy/03_explode/skeleton-03_explode_03.png">
+<img id="enemyexplode5" src="imgs/enemy/03_explode/skeleton-03_explode_04.png">
+<img id="enemyexplode6" src="imgs/enemy/03_explode/skeleton-03_explode_05.png">
+<img id="enemyexplode7" src="imgs/enemy/03_explode/skeleton-03_explode_06.png">
+<img id="enemyexplode8" src="imgs/enemy/03_explode/skeleton-03_explode_07.png">
+<img id="enemyexplode9" src="imgs/enemy/03_explode/skeleton-03_explode_08.png">
+<img id="enemyexplode10" src="imgs/enemy/03_explode/skeleton-03_explode_09.png">
+<img id="enemyexplode11" src="imgs/enemy/03_explode/skeleton-03_explode_10.png">
+<img id="enemyexplode12" src="imgs/enemy/03_explode/skeleton-03_explode_11.png">
+<img id="enemyexplode13" src="imgs/enemy/03_explode/skeleton-03_explode_12.png">
+
+<img id="ground" src="imgs/metal.jpg">
+
+<script>
+
 window.onload = function () {
     const devicePixelRatio = window.devicePixelRatio || 1;
     const canvas = document.getElementById("game");
@@ -195,3 +314,9 @@ window.onresize = function () {
     document.write("<h1 style='font-size: 75px; font-family: monospace'>Hey, that's cheating! You cant resize the window!</h1>")
 }
 
+
+</script>
+
+<p>A game Programmed by Vedant</p>
+</body>
+</html>
